@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol"; // Update import statement
 
 contract NFTMarketplace {
     address public owner;
@@ -44,7 +44,7 @@ contract NFTMarketplace {
         uint256 _tokenId,
         uint256 _price
     ) external {
-        IERC721 nft = IERC721(_nftContract);
+        IERC721Enumerable nft = IERC721Enumerable(_nftContract); // Update interface
         require(
             nft.ownerOf(_tokenId) == msg.sender,
             "You must own the NFT to create a listing"
@@ -71,7 +71,7 @@ contract NFTMarketplace {
             msg.value >= listing.price,
             "Insufficient funds to buy the listing"
         );
-        IERC721 nft = IERC721(listing.nftContract);
+        IERC721Enumerable nft = IERC721Enumerable(listing.nftContract); // Update interface
         nft.transferFrom(address(this), msg.sender, listing.tokenId);
         payable(listing.seller).transfer(listing.price);
         emit ListingSold(
